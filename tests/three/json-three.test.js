@@ -68,3 +68,79 @@ test('places-json', function (t) {
   t.end()
 })
 
+test('phoneNumbers-json:', function (t) {
+  let arr = [
+    [
+      'My phone number is (201) 111-2222.',
+      {
+        text: '(201) 111-2222.',
+        terms: [
+          {
+            text: '201',
+            pre: '(',
+            post: ') ',
+            tags: ['PhoneNumber'],
+            normal: '201',
+            index: [0, 4],
+            dirty: true,
+            confidence: 0.6,
+            chunk: 'Noun',
+            offset: { index: 4, start: 20, length: 3 },
+          },
+          {
+            text: '111-2222',
+            pre: '',
+            post: '.',
+            tags: ['PhoneNumber'],
+            normal: '111-2222',
+            index: [0, 5],
+            dirty: true,
+            confidence: 0.6,
+            chunk: 'Noun',
+            offset: { index: 5, start: 25, length: 8 },
+          },
+        ],
+        offset: { index: 4, start: 19, length: 15 },
+      },
+    ],
+    [
+      "My co-worker's number is +1 212-456-7890.",
+      {
+        text: '+1 212-456-7890.',
+        terms: [
+          {
+            text: '+1',
+            pre: '',
+            post: ' ',
+            tags: ['PhoneNumber'],
+            normal: '+1',
+            index: [0, 4],
+            dirty: true,
+            confidence: 0.6,
+            chunk: 'Noun',
+            offset: { index: 4, start: 25, length: 2 },
+          },
+          {
+            text: '212-456-7890',
+            pre: '',
+            post: '.',
+            tags: ['PhoneNumber'],
+            normal: '212-456-7890',
+            index: [0, 5],
+            dirty: true,
+            confidence: 0.6,
+            chunk: 'Noun',
+            offset: { index: 5, start: 28, length: 12 },
+          },
+        ],
+        offset: { index: 4, start: 25, length: 16 },
+      },
+    ],
+  ]
+  arr.forEach(function (a) {
+    const json = nlp(a[0]).phoneNumbers(0).json({ offset: true })[0]
+    json.terms.forEach(term => delete term.id)
+    t.deepEqual(json, a[1])
+  })
+  t.end()
+})
